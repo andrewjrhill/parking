@@ -1,0 +1,32 @@
+// Libraries
+@import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~breakpoint-sass/stylesheets/breakpoint';
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap');
+
+// Colors
+$success-green: #6dc378;
+$warning-yellow: #efb53d;
+$error-red: #f83264;
+
+$black: #111827;
+$white: #ffffff;
+
+$grey-light: #fafafa;
+$slate: #626670;
+
+$swans-down: #D8EFEA;
+$aquamarine: #64FFC3;
+
+$skog: #285358;
+$skog-dark: #204346;
+
+$default-box-shadow: rgba(90, 102, 124, 0.3);
+
+// Breakpoints
+$small: 425px !default;
+$medium: 720px !default;
+$large: 940px !default;
+$max-width: 1400px !default;

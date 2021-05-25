@@ -30,6 +30,7 @@
         &.active {
             background-color: $swan-down;
             color: $skog;
+            font-weight: 700;
         }
 
         & > .bp3-button-text {
@@ -40,11 +41,22 @@
             width: 100%;
         }
     }
-}
 
-.heading {
-    color: $black;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    .heading {
+        color: $black;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .availability-wrapper {
+        align-items: center;
+        display: flex;
+
+        .icon {
+            margin-left: 0.5rem;
+            width: 1.1rem;
+        }
+    }
+
 }

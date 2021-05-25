@@ -1,0 +1,161 @@
+@import '../../theme/variables';
+
+.parking-space-item {
+    &:not(:last-child) {
+        border-bottom: 1px solid $grey-border;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    &.available > .button {
+        color: $skog;
+
+        .availability {
+            background-color: $skog;
+        }
+    }
+
+    &.unavailable {
+        &.active .button .availability {
+            background-color: $slate;
+        }
+
+        & > .button {
+            color: $grey-mid;
+
+            &:hover {
+                color: $slate;
+
+                .availability {
+                    background-color: $slate;
+                }
+            }
+
+            .availability {
+                background-color: $grey-mid;
+            }
+        }
+    }
+
+    &.active > .button {
+        background-color: $swan-down;
+        border: 1px solid $swan-down;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        color: $slate;
+    }
+
+    & > .button {
+        align-items: center;
+        background-color: $white;
+        border: 1px solid $white;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: [cols-start] 50% [cols-middle] 50% [cols-end];
+        grid-template-rows: [rows-start] 50% [rows-middle] 50% [rows-end];
+        padding: 1rem;
+        position: relative;
+        transition: background-color 0.2s linear,
+                    border 0.2s linear,
+                    color 0.2s linear;
+        width: 100%;
+        z-index: 1;
+
+        @include breakpoint($large) {
+            grid-template-columns: [cols-start] 6.5rem [cols-1] 6.5rem [cols-2] 6.5rem [cols-3] 1fr [cols-end];
+            grid-template-rows: [rows-start] 100% [rows-end];
+        }
+
+        &:hover {
+            background-color: $swan-down;
+            border: 1px solid $swan-down;
+        }
+
+        .name {
+            font-weight: 600;
+            grid-area: rows-start / cols-start / rows-middle / cols-middle;
+            justify-self: flex-start;
+
+            @include breakpoint($large) {
+                grid-area: rows-start / cols-start / rows-end / cols-1;
+            }
+        }
+
+        .type {
+            grid-area: rows-middle / cols-start / rows-end / cols-middle;
+            justify-self: flex-start;
+            margin: 0.5rem 0 0 0;
+            text-transform: capitalize;
+
+            @include breakpoint($large) {
+                margin: 0;
+                grid-area: rows-start / cols-1 / rows-end / cols-2;
+            }
+        }
+
+        .availability {
+            border-radius: 0.5rem;
+            color: $white;
+            font-size: 0.65rem;
+            grid-area: rows-start / cols-middle / rows-middle / cols-end;
+            justify-self: flex-end;
+            letter-spacing: 0.025rem;
+            padding: 0.2rem 0.5rem;
+            text-transform: uppercase;
+            transition: background-color 0.2s linear;
+
+            @include breakpoint($large) {
+                font-size: 0.75rem;
+                grid-area: rows-start / cols-3 / rows-end / cols-end;
+                padding: 0.25rem 0.75rem;
+            }
+        }
+
+        .rates {
+            grid-area: rows-middle / cols-middle / rows-end / cols-end;
+            justify-self: flex-end;
+            margin: 0.5rem 0 0 0;
+            text-decoration: underline;
+
+            @include breakpoint($large) {
+                margin: 0;
+                grid-area: rows-start / cols-2 / rows-end / cols-3;
+            }
+        }
+    }
+
+    .rates-container {
+        display: flex;
+        background-color: $grey-light;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        padding: 1rem;
+
+        @include breakpoint($small) {
+            justify-content: flex-start;
+        }
+
+        .rate {
+            display: flex;
+            flex-flow: column nowrap;
+
+        @include breakpoint($small) {
+            margin-right: 2rem;
+        }
+
+            .amount {
+                color: $black;
+                font-weight: 700;
+                font-size: 0.85rem;
+            }
+
+            .hour {
+                color: $slate;
+                font-size: 0.75rem;
+            }
+        }
+    }
+}

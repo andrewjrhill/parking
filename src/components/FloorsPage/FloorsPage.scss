@@ -1,0 +1,14 @@
+@import '../../theme/variables';
+
+.floors-page {
+    border-radius: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+
+    @include breakpoint($medium) {
+        border: 1px solid $grey-border;
+        margin: 0 1.5rem;
+        padding: 1rem;
+    }
+}

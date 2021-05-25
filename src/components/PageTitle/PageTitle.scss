@@ -27,6 +27,7 @@
             width: 100%;
 
             @include breakpoint($medium) {
+                margin-left: 1.5rem;
                 max-width: 16rem;
             }
         }

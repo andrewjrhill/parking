@@ -18,7 +18,7 @@
     @include breakpoint($medium) {
         display: flex;
         flex-flow: column nowrap;
-        margin: 0 auto;
+        margin: 0 auto 3rem auto;
         max-width: calc(#{$max-width} - 4rem);
         padding: 2rem 2rem 0 2rem;
     }

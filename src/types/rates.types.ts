@@ -1,5 +1,5 @@
 interface Rate {
-    amount: string
+    amount: number
     hour: number
 }
 

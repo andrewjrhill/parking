@@ -14,10 +14,11 @@ $error-red: #f83264;
 $black: #111827;
 $white: #ffffff;
 
-$grey-light: #fafafa;
+$grey-border: #EDEDED;
+$grey-light: #FAFAFA;
 $slate: #626670;
 
-$swans-down: #D8EFEA;
+$swan-down: #D8EFEA;
 $aquamarine: #64FFC3;
 
 $skog: #285358;
@@ -26,6 +27,14 @@ $skog-dark: #204346;
 $default-box-shadow: rgba(90, 102, 124, 0.3);
 
 // Breakpoints
+
+/**
+ * When updting this list; make sure to update the
+ * corresponding breakpoints found in the constants/breakpoints.ts
+ * file as well so that breakpoints are synchronised between
+ * both the TypeScript and the SCSS.
+ */
+
 $small: 425px !default;
 $medium: 720px !default;
 $large: 940px !default;

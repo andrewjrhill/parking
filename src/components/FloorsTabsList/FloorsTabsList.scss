@@ -1,0 +1,50 @@
+@import '../../theme/variables';
+
+.floors-tabs-list {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+
+    @include breakpoint($medium) {
+        border: 1px solid $grey-border;
+        border-radius: 0.5rem;
+        max-width: 12rem;
+        padding: 1rem;
+    }
+
+    @include breakpoint($large) {
+        max-width: 15rem;
+    }
+
+    & > .tab.bp3-button {
+        background-color: $grey-light;
+        background-image: none;
+        box-shadow: none;
+        color: $black;
+        font-weight: 500;
+
+        &:not(:last-child) {
+            margin-bottom: 0.75rem;
+        }
+
+        &.active {
+            background-color: $swan-down;
+            color: $skog;
+        }
+
+        & > .bp3-button-text {
+            align-items: center;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            width: 100%;
+        }
+    }
+}
+
+.heading {
+    color: $black;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}

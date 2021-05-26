@@ -24,11 +24,11 @@ const Routes: React.FC = () => (
             <Route component={route.component} exact={route.exact} key={route.path} path={route.path} />
         ))}
 
-        <Route path='/floor'>
+        <Route path='/floor' exact>
             <Redirect to='/' />
         </Route>
 
-        <Route path='/'>
+        <Route path='*' exact>
             <Redirect to={`/floor/${FLOOR_DATA[0].id}`} />
         </Route>
     </Switch>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 import FLOOR_DATA from '../../data/floors.data'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
@@ -11,14 +11,20 @@ const PageTitle: React.FC = () => {
     const { pathname } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
 
-    const currentFloor = FLOOR_DATA.find((floor: Floor) => (path?.params as { id: string }).id === floor.id)
-    const parkingAvailability =
-        !!currentFloor &&
-        PARKING_SPACE_DATA.filter(
-            (parkingSpace: ParkingSpace) => parkingSpace.floorId === currentFloor.id && !!parkingSpace.available
-        ).length > 0
-            ? 'Parking Available'
-            : 'Parking Unavailable'
+    const currentFloor = !!path
+        ? FLOOR_DATA.find((floor: Floor) => (path?.params as { id: string }).id === floor.id)
+        : undefined
+
+    const parkingAvailability = useMemo(
+        () =>
+            !!currentFloor &&
+            PARKING_SPACE_DATA.filter(
+                (parkingSpace: ParkingSpace) => parkingSpace.floorId === currentFloor.id && !!parkingSpace.available
+            ).length > 0
+                ? 'Parking Available'
+                : 'Parking Unavailable',
+        [currentFloor]
+    )
 
     return (
         <div className='page-title'>

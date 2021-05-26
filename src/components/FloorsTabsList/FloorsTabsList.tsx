@@ -12,10 +12,10 @@ import { mdiArrowRightCircle } from '@mdi/js'
 
 const FloorsTabsList: React.FC = () => {
     const history = useHistory()
-    const { pathname } = useLocation()
+    const { pathname, search } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
 
-    const isActive = (floorId: string) => (path?.params as { id: string }).id === floorId
+    const isActive = (floorId: string) => (!!path ? (path?.params as { id: string }).id === floorId : false)
 
     const parkingSpaceAvailabilityCount = (floorId: string) =>
         PARKING_SPACE_DATA.filter(
@@ -30,7 +30,7 @@ const FloorsTabsList: React.FC = () => {
                 <Button
                     className={classnames('tab', isActive(floor.id) && 'active')}
                     key={floor.id}
-                    onClick={() => history.push(`/floor/${floor.id}`)}
+                    onClick={() => history.push({ pathname: `/floor/${floor.id}`, search })}
                 >
                     <span>{floor.name}</span>
 

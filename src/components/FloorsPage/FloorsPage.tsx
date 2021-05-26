@@ -5,14 +5,20 @@ import ParkingSpace from '../../types/parking-space.types'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
 import { useParams } from 'react-router'
 import { NonIdealState } from '@blueprintjs/core'
+import { useQuery } from '../../Utilities/utilities'
+import { useLocation } from 'react-router-dom'
 
 const FloorsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
+    const query = useQuery(useLocation().search)
 
     const [selectedParkingSpaceId, setSelectedParkingSpaceId] = useState<string | undefined>()
     const onSelectParkingSpace = (floorId?: string) => setSelectedParkingSpaceId(floorId)
 
-    const parkingSpaces = PARKING_SPACE_DATA.filter((parkingSpace: ParkingSpace) => parkingSpace.floorId === id)
+    const parkingSpaces = PARKING_SPACE_DATA.filter((parkingSpace: ParkingSpace) => {
+        if (!!query.get('filter')) return parkingSpace.floorId === id && parkingSpace.type === query.get('filter')
+        else return parkingSpace.floorId === id
+    })
 
     return (
         <div className='floors-page'>

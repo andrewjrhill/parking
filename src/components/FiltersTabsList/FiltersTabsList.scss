@@ -1,0 +1,86 @@
+@import '../../theme/variables';
+
+.filters-tabs-list {
+    display: flex;
+    flex-flow: column nowrap;
+    height: fit-content;
+    width: 100%;
+
+    @include breakpoint($medium) {
+        border: 1px solid $grey-border;
+        border-radius: 0.5rem;
+        max-width: 12rem;
+        padding: 1rem;
+    }
+
+    @include breakpoint($large) {
+        max-width: 16rem;
+    }
+
+    & > .tab.bp3-button {
+        background-image: none;
+        box-shadow: none;
+        font-weight: 500;
+
+        &:not(:last-child) {
+            margin-bottom: 0.75rem;
+        }
+
+        &.active {
+            background-color: $swan-down;
+            color: $skog;
+            font-weight: 700;
+
+            .bp3-button-text {
+                grid-template-columns: [cols-start] 2.25rem [cols-1] auto [cols-2] 2rem [cols-3] 2rem [cols-end];
+
+                .icon {
+                    color: $skog;
+                }
+            }
+        }
+
+        &.inactive {
+            background-color: $grey-light;
+            color: $black;
+
+            .bp3-button-text {
+                grid-template-columns: [cols-start] 2.25rem [cols-1] auto [cols-2] 2rem [cols-end];
+
+                .icon {
+                    color: $slate;
+                }
+            }
+        }
+
+        .bp3-button-text {
+            align-items: center;
+            display: grid;
+            width: 100%;
+        }
+
+        .icon {
+            width: 1.375rem;
+
+            &.checkmark{
+                justify-self: flex-end;
+                width: 1.1rem;
+            }
+        }
+
+        .availability-count {
+            text-align: right;
+        }
+
+        .type {
+            text-transform: capitalize;
+        }
+    }
+
+    .heading {
+        color: $black;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+}

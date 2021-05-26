@@ -1,6 +1,10 @@
 @import '../../theme/variables';
 
 .parking-space-item {
+    @include breakpoint($large) {
+        min-width: 28rem;
+    }
+
     &:not(:last-child) {
         border-bottom: 1px solid $grey-border;
         margin-bottom: 0.5rem;
@@ -63,8 +67,12 @@
         z-index: 1;
 
         @include breakpoint($large) {
-            grid-template-columns: [cols-start] 6.5rem [cols-1] 6.5rem [cols-2] 6.5rem [cols-3] 1fr [cols-end];
+            grid-template-columns: [cols-start] 5rem [cols-1] 5rem [cols-2] 5rem [cols-3] 1fr [cols-end];
             grid-template-rows: [rows-start] 100% [rows-end];
+        }
+
+        @include breakpoint($max-width) {
+            grid-template-columns: [cols-start] 6.25rem [cols-1] 6.25rem [cols-2] 6.25rem [cols-3] 1fr [cols-end];
         }
 
         &:hover {

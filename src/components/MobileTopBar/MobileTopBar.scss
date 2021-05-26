@@ -1,5 +1,11 @@
 @import '../../theme/variables';
 
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .icon {
     fill: $black;
     height: auto;

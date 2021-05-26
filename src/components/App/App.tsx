@@ -9,7 +9,7 @@ import Routes from '../Routes/Routes'
 import PageTitle from '../PageTitle/PageTitle'
 import FloorsTabsList from '../FloorsTabsList/FloorsTabsList'
 import FiltersTabsList from '../FiltersTabsList/FiltersTabsList'
-import ParkingAddDialog from '../ParkingAddDialog/ParkingAddDialog'
+import ParkingAddOrEditDialog from '../ParkingAddOrEditDialog/ParkingAddOrEditDialog'
 
 const App: React.FC = () => {
     const isLargeViewport = useMediaQuery({ query: `(min-width: ${breakpoints.medium})` })
@@ -48,7 +48,7 @@ const App: React.FC = () => {
                 </div>
             </div>
 
-            <ParkingAddDialog isOpen={addDialogOpen} onClose={onToggleAddDialog} />
+            <ParkingAddOrEditDialog isOpen={addDialogOpen} onClose={onToggleAddDialog} />
         </Router>
     )
 }

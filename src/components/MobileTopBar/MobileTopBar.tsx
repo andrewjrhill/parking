@@ -11,7 +11,7 @@ interface Props {
 
 const MobileTopBar: React.FC<Props> = ({ handleFilterDrawerToggle, handleNavDrawerToggle }) => (
     <Navbar>
-        <NavbarGroup className='flex-container'>
+        <NavbarGroup className='mobile-top-bar'>
             <Button minimal onClick={() => handleNavDrawerToggle()}>
                 <Icon className='icon' path={mdiMenu} />
             </Button>

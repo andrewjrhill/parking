@@ -1,13 +1,13 @@
 @import '../../theme/variables';
 
-.flex-container {
+.mobile-top-bar {
     display: flex;
     justify-content: space-between;
     width: 100%;
-}
 
-.icon {
-    fill: $black;
-    height: auto;
-    width: 1.5rem;
+    .icon {
+        fill: $black;
+        height: auto;
+        width: 1.5rem;
+    }
 }

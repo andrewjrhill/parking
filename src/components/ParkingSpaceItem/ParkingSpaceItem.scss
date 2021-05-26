@@ -11,52 +11,40 @@
         padding-bottom: 0.5rem;
     }
 
-    &.available > .button {
-        color: $skog;
+    &.active {
+        .general-info {
+            background-color: $swan-down;
+            border: 1px solid $swan-down;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
 
+    &.available {
         .availability {
             background-color: $skog;
+            color: $white;
         }
     }
 
     &.unavailable {
-        &.active .button .availability {
+        .availability {
+            background-color: $grey-mid;
+            color: $white;
+        }
+
+        &.active .availability {
             background-color: $slate;
         }
-
-        & > .button {
-            color: $grey-mid;
-
-            &:hover {
-                color: $slate;
-
-                .availability {
-                    background-color: $slate;
-                }
-            }
-
-            .availability {
-                background-color: $grey-mid;
-            }
-        }
     }
 
-    &.active > .button {
-        background-color: $swan-down;
-        border: 1px solid $swan-down;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        color: $slate;
-    }
-
-    & > .button {
+    .general-info {
         align-items: center;
         background-color: $white;
         border: 1px solid $white;
         border-radius: 0.5rem;
-        cursor: pointer;
         display: grid;
-        grid-template-columns: [cols-start] 50% [cols-middle] 50% [cols-end];
+        grid-template-columns: [cols-start] 1fr [cols-1] 1fr [cols-2] 2rem [cols-end];
         grid-template-rows: [rows-start] 50% [rows-middle] 50% [rows-end];
         padding: 1rem;
         position: relative;
@@ -66,13 +54,16 @@
         width: 100%;
         z-index: 1;
 
-        @include breakpoint($large) {
-            grid-template-columns: [cols-start] 5rem [cols-1] 5rem [cols-2] 5rem [cols-3] 1fr [cols-end];
-            grid-template-rows: [rows-start] 100% [rows-end];
+        @include breakpoint($medium) {
+            padding: 0.5rem;
+            grid-template-columns: [cols-start] 50% [cols-mid] 50% [cols-end];
+            grid-template-rows: [rows-start] auto [rows-1] auto [rows-2] auto [rows-end];
         }
 
-        @include breakpoint($max-width) {
-            grid-template-columns: [cols-start] 6.25rem [cols-1] 6.25rem [cols-2] 6.25rem [cols-3] 1fr [cols-end];
+        @include breakpoint($large) {
+            padding: 1rem;
+            grid-template-columns: [cols-start] 1fr [cols-1] 1fr [cols-2] 1fr [cols-3] 1fr [cols-4] 2rem [cols-end];
+            grid-template-rows: [rows-start] 100% [rows-end];
         }
 
         &:hover {
@@ -82,8 +73,15 @@
 
         .name {
             font-weight: 600;
-            grid-area: rows-start / cols-start / rows-middle / cols-middle;
+            grid-area: rows-start / cols-start / rows-middle / cols-1;
             justify-self: flex-start;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            @include breakpoint($medium) {
+                grid-area: rows-start / cols-start / rows-1 / cols-mid;
+            }
 
             @include breakpoint($large) {
                 grid-area: rows-start / cols-start / rows-end / cols-1;
@@ -91,44 +89,80 @@
         }
 
         .type {
-            grid-area: rows-middle / cols-start / rows-end / cols-middle;
-            justify-self: flex-start;
-            margin: 0.5rem 0 0 0;
+            grid-area: rows-start / cols-1 / rows-middle / cols-2;
             text-transform: capitalize;
 
+            @include breakpoint($medium) {
+                margin-top: 0.25rem;
+                grid-area: rows-1 / cols-start / rows-2 / cols-mid;
+            }
+
             @include breakpoint($large) {
-                margin: 0;
                 grid-area: rows-start / cols-1 / rows-end / cols-2;
+                margin: 0;
             }
         }
 
         .availability {
-            border-radius: 0.5rem;
-            color: $white;
+            border-radius: 0.25rem;
             font-size: 0.65rem;
-            grid-area: rows-start / cols-middle / rows-middle / cols-end;
-            justify-self: flex-end;
-            letter-spacing: 0.025rem;
-            padding: 0.2rem 0.5rem;
+            grid-area: rows-middle / cols-start / rows-end / cols-1;
+            margin: 0.5rem 0 0 0;
+            padding: 0.3rem 0.4rem;
             text-transform: uppercase;
             transition: background-color 0.2s linear;
+            width: fit-content;
+
+            @include breakpoint($medium) {
+                grid-area: rows-2 / cols-start / rows-2 / cols-mid;
+            }
 
             @include breakpoint($large) {
                 font-size: 0.75rem;
-                grid-area: rows-start / cols-3 / rows-end / cols-end;
-                padding: 0.25rem 0.75rem;
+                grid-area: rows-start / cols-3 / rows-end / cols-4;
+                justify-self: flex-start;
             }
         }
 
         .rates {
-            grid-area: rows-middle / cols-middle / rows-end / cols-end;
-            justify-self: flex-end;
-            margin: 0.5rem 0 0 0;
+            grid-area: rows-middle / cols-1 / rows-end / cols-2;
+            justify-self: flex-start;
+            margin: 0.5rem 0 0 -7px;
             text-decoration: underline;
 
+            @include breakpoint($medium) {
+                grid-area: rows-2 / cols-mid / rows-end / cols-end;
+                justify-self: flex-end;
+                margin: 0.5rem 0 0 0;
+            }
+
             @include breakpoint($large) {
-                margin: 0;
                 grid-area: rows-start / cols-2 / rows-end / cols-3;
+                justify-self: flex-start;
+                margin: 0;
+            }
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        .edit-space-button {
+            background-color: $grey-light;
+            grid-area: rows-start / cols-2 / rows-end / cols-3;
+            height: 2rem;
+            width: 2rem;
+
+            @include breakpoint($medium) {
+                grid-area: rows-start / cols-mid / rows-2 / cols-end;
+                justify-self: flex-end;
+                margin-right: 7px;
+            }
+
+            @include breakpoint($large) {
+                grid-area: rows-start / cols-4 / rows-end / cols-end;
+                justify-self: flex-start;
+                margin: 0;
             }
         }
     }
@@ -141,8 +175,24 @@
         flex-flow: row wrap;
         padding: 1rem 1rem 0 1rem;
 
+        @include breakpoint($medium) {
+            padding: 0.5rem 0.5rem 0 0.5rem;
+        }
+
+        @include breakpoint($large) {
+            padding: 1rem 1rem 0 1rem;
+        }
+
         & > * {
             margin-bottom: 1rem;
+
+            @include breakpoint($medium) {
+                margin-bottom: 0.5rem;
+            }
+
+            @include breakpoint($large) {
+                margin-bottom: 1rem;
+            }
 
             &:not(:last-child) {
                 margin-right: 1rem;

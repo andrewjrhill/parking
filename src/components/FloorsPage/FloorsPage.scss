@@ -4,11 +4,19 @@
     border-radius: 0.5rem;
     display: flex;
     flex-flow: column nowrap;
+    height: fit-content;
     width: 100%;
 
     @include breakpoint($medium) {
         border: 1px solid $grey-border;
-        margin: 0 1.5rem;
+        margin: 0 0.5rem;
+        padding: 0.5rem;
+        width: calc(100% - 1rem);
+    }
+
+    @include breakpoint($large) {
+        margin: 0 1rem;
         padding: 1rem;
+        width: calc(100% - 4rem);
     }
 }

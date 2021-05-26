@@ -1,11 +1,11 @@
-import React, { MouseEvent, SyntheticEvent, useState } from 'react'
+import React, { MouseEvent, SyntheticEvent, useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button, Dialog, HTMLSelect, InputGroup, Label, NumericInput } from '@blueprintjs/core'
 import { matchPath, useLocation } from 'react-router-dom'
 import FLOOR_DATA from '../../data/floors.data'
 import Floor from '../../types/floor.types'
 import CloseButton from '../CloseButton/CloseButton'
-import './ParkingAddDialog.scss'
+import './ParkingAddOrEditDialog.scss'
 import { capitalize, uniq } from 'lodash'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
 import ParkingSpace, { ParkingSpaceType } from '../../types/parking-space.types'
@@ -13,11 +13,12 @@ import ordinal from 'ordinal'
 import Rates, { HourlyRate } from '../../types/rates.types'
 
 interface Props {
+    initialFormState?: ParkingSpace
     isOpen: boolean
     onClose: () => void
 }
 
-const initialFormState = {
+const emptyFormState = {
     available: true,
     name: '',
     rates: {
@@ -27,14 +28,25 @@ const initialFormState = {
     type: 'compact' as ParkingSpaceType
 }
 
-const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
+const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onClose }) => {
     const { pathname } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
 
-    const [name, setName] = useState<string>(initialFormState.name)
-    const [type, setType] = useState<ParkingSpaceType>(initialFormState.type)
-    const [available, setAvailable] = useState<boolean>(initialFormState.available)
-    const [rates, setRates] = useState<Rates>(initialFormState.rates)
+    const [name, setName] = useState<string>(initialFormState?.name ?? emptyFormState.name)
+    const [type, setType] = useState<ParkingSpaceType>(initialFormState?.type ?? emptyFormState.type)
+    const [available, setAvailable] = useState<boolean>(initialFormState?.available ?? emptyFormState.available)
+    const [rates, setRates] = useState<Rates>(initialFormState?.rates ?? emptyFormState.rates)
+
+    useEffect(() => {
+        if (!!initialFormState) {
+            setName(initialFormState.name)
+            setType(initialFormState.type)
+            setAvailable(initialFormState.available)
+            setRates(initialFormState.rates)
+        } else {
+            resetForm()
+        }
+    }, [initialFormState])
 
     const currentFloor = !!path
         ? FLOOR_DATA.find((floor: Floor) => (path?.params as { id: string }).id === floor.id)
@@ -45,10 +57,10 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
     )
 
     const resetForm = () => {
-        setName(initialFormState.name)
-        setType(initialFormState.type)
-        setAvailable(initialFormState.available)
-        setRates(initialFormState.rates)
+        setName(emptyFormState.name)
+        setType(emptyFormState.type)
+        setAvailable(emptyFormState.available)
+        setRates(emptyFormState.rates)
     }
 
     const onSubmit = (event: SyntheticEvent) => {
@@ -59,12 +71,14 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
         const payload = {
             available,
             floorId: currentFloor.id,
-            id: uuidv4(),
+            id: initialFormState?.id ?? uuidv4(),
             name,
             rates,
             type: type.toLowerCase() as ParkingSpaceType
         }
 
+        const existingParkingSpaceIndex = PARKING_SPACE_DATA.findIndex(parkingIndex => parkingIndex.id === payload.id)
+        if (existingParkingSpaceIndex >= 0) PARKING_SPACE_DATA.splice(existingParkingSpaceIndex, 1)
         PARKING_SPACE_DATA.push(payload)
 
         onClose()
@@ -72,7 +86,7 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
     }
 
     return (
-        <Dialog className='parking-add-dialog' isOpen={isOpen} onClose={onClose}>
+        <Dialog className='parking-add-or-edit-dialog' isOpen={isOpen} onClose={onClose}>
             <CloseButton onClick={onClose} />
 
             <p className='title'>Add Parking Space</p>
@@ -87,6 +101,7 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
                         fill
                         id='name'
                         name='name'
+                        maxLength={5}
                         onChange={event => setName(event.currentTarget.value)}
                         placeholder='e.g. P314'
                         required
@@ -116,7 +131,7 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
                             id='available'
                             name='available'
                             onChange={event => {
-                                if (event.currentTarget.value === 'available') return setAvailable(true)
+                                if (event.currentTarget.value === 'Available') return setAvailable(true)
                                 else return setAvailable(false)
                             }}
                             options={['Available', 'Unavailable']}
@@ -199,4 +214,4 @@ const ParkingAddDialog: React.FC<Props> = ({ isOpen, onClose }) => {
     )
 }
 
-export default ParkingAddDialog
+export default ParkingAddOrEditDialog

@@ -2,8 +2,12 @@ import React from 'react'
 import { Button } from '@blueprintjs/core'
 import './ParkingCreateButton.scss'
 
-const ParkingCreateButton: React.FC = () => (
-    <Button className='parkingCreateButton' large>
+interface Props {
+    onClick: () => void
+}
+
+const ParkingCreateButton: React.FC<Props> = ({ onClick }) => (
+    <Button className='parkingCreateButton' large onClick={onClick}>
         Add Parking
     </Button>
 )

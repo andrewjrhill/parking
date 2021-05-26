@@ -1,6 +1,11 @@
-interface Rate {
+export interface HourlyRate {
     amount: number
     hour: number
 }
 
-export default Rate
+interface Rates {
+    hourly: HourlyRate[]
+    remaining: number
+}
+
+export default Rates

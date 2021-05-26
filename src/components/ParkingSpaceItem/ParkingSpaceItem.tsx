@@ -4,7 +4,8 @@ import ordinal from 'ordinal'
 import './ParkingSpaceItem.scss'
 import ParkingSpace from '../../types/parking-space.types'
 import { Collapse } from '@blueprintjs/core'
-import Rate from '../../types/rates.types'
+import { HourlyRate } from '../../types/rates.types'
+import RatesBox from '../RatesBox/RatesBox'
 
 interface Props {
     parkingSpace: ParkingSpace
@@ -27,12 +28,15 @@ const ParkingSpaceItem: React.FC<Props> = ({ parkingSpace, onSelectParkingSpace,
 
             <Collapse isOpen={isActive}>
                 <div className='rates-container'>
-                    {parkingSpace.rates.map((rate: Rate) => (
-                        <div className='rate' key={rate.hour}>
-                            <span className='hour'>{`${ordinal(rate.hour)} hour: `}</span>
-                            <span className='amount'>{`${rate.amount} NOK`}</span>
-                        </div>
+                    {parkingSpace.rates.hourly.map((rate: HourlyRate) => (
+                        <RatesBox
+                            amount={`${rate.amount} NOK`}
+                            key={rate.hour}
+                            label={`${ordinal(rate.hour)} hour: `}
+                        />
                     ))}
+
+                    <RatesBox amount={`${parkingSpace.rates.remaining} NOK`} label='Remaining hours: ' />
                 </div>
             </Collapse>
         </div>

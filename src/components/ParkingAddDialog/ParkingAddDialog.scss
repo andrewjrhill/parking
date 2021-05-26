@@ -1,0 +1,61 @@
+@import '../../theme/variables';
+
+.parking-add-dialog {
+    margin: 1rem;
+    padding: 1rem;
+
+    .title {
+        color: $skog;
+        font-size: 1.5rem;
+        font-weight: 600;
+
+        @include breakpoint($medium) {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .subtitle {
+        color: $slate;
+        font-size: 0.9rem;
+    }
+
+    .form {
+        margin: 1.5rem 0 0 0;
+
+        label {
+            margin: 0 0 1rem 0;
+            width: 100%;
+        }
+
+        .side-by-side {
+            display: flex;
+            flex-flow: column nowrap;
+            width: 100%;
+
+            @include breakpoint($medium) {
+                flex-flow: row nowrap;
+            }
+
+            label:not(:last-child) {
+                margin: 0 1rem 1rem 0;
+            }
+        }
+
+        .form-section-heading {
+            border-bottom: 1px solid $grey-divider;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .add-additional-rate-button {
+            margin-bottom: 1rem;
+        }
+
+        .submit-button {
+            color: $white;
+            background-color: $skog;
+        }
+    }
+}
+

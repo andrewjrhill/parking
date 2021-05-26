@@ -7,7 +7,11 @@ import ParkingSpace from '../../types/parking-space.types'
 import ParkingCreateButton from '../ParkingCreateButton/ParkingCreateButton'
 import './PageTitle.scss'
 
-const PageTitle: React.FC = () => {
+interface Props {
+    onToggleAddDialog: () => void
+}
+
+const PageTitle: React.FC<Props> = ({ onToggleAddDialog }) => {
     const { pathname } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
 
@@ -34,7 +38,7 @@ const PageTitle: React.FC = () => {
             </div>
 
             <div className='action-container'>
-                <ParkingCreateButton />
+                <ParkingCreateButton onClick={onToggleAddDialog} />
             </div>
         </div>
     )

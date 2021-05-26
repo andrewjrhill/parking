@@ -2,9 +2,8 @@ import React from 'react'
 import './DrawerWhenMobile.scss'
 import { useMediaQuery } from 'react-responsive'
 import breakpoints from '../../constants/breakpoints'
-import { Button, Drawer } from '@blueprintjs/core'
-import Icon from '@mdi/react'
-import { mdiClose } from '@mdi/js'
+import { Drawer } from '@blueprintjs/core'
+import CloseButton from '../CloseButton/CloseButton'
 
 interface Props {
     handleToggle: () => void
@@ -19,11 +18,7 @@ const DrawerWhenMobile: React.FC<Props> = ({ children, handleToggle, open, posit
         <>{children}</>
     ) : (
         <Drawer className='drawer' isOpen={open} onClose={() => handleToggle()} position={position} size='80%'>
-            <Button className='close-button' minimal onClick={() => handleToggle()}>
-                <Icon className='icon' path={mdiClose} />
-                <span>close</span>
-            </Button>
-
+            <CloseButton onClick={handleToggle} />
             {children}
         </Drawer>
     )

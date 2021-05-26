@@ -1,0 +1,18 @@
+@import '../../theme/variables';
+
+.close-button {
+    margin: 0 0 1rem auto;
+    text-transform: uppercase;
+    width: fit-content;
+
+    & > .bp3-button-text {
+        align-items: center;
+        display: flex;
+
+        .icon {
+            fill: $black;
+            margin-right: 0.25rem;
+            width: 1.25rem;
+        }
+    }
+}

@@ -1,13 +1,13 @@
-import Rate from './rates.types'
+import Rates from './rates.types'
 
-type ParkingSpaceType = 'compact' | 'large' | 'handicapped' | 'motorcycle' | 'bicycle'
+export type ParkingSpaceType = 'compact' | 'large' | 'handicapped' | 'motorcycle' | 'bicycle'
 
 interface ParkingSpace {
     available: boolean
     floorId: string
     id: string
     name: string
-    rates: Rate[]
+    rates: Rates
     type: ParkingSpaceType
 }
 

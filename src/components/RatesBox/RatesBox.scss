@@ -1,0 +1,21 @@
+@import '../../theme/variables';
+
+.rate {
+    display: flex;
+    flex-flow: column nowrap;
+
+    @include breakpoint($small) {
+        margin-right: 2rem;
+    }
+
+    .amount {
+        color: $black;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .hour {
+        color: $slate;
+        font-size: 0.75rem;
+    }
+}

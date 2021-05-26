@@ -139,30 +139,13 @@
         border-bottom-left-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
         flex-flow: row wrap;
-        justify-content: space-between;
-        padding: 1rem;
+        padding: 1rem 1rem 0 1rem;
 
-        @include breakpoint($small) {
-            justify-content: flex-start;
-        }
+        & > * {
+            margin-bottom: 1rem;
 
-        .rate {
-            display: flex;
-            flex-flow: column nowrap;
-
-        @include breakpoint($small) {
-            margin-right: 2rem;
-        }
-
-            .amount {
-                color: $black;
-                font-weight: 700;
-                font-size: 0.85rem;
-            }
-
-            .hour {
-                color: $slate;
-                font-size: 0.75rem;
+            &:not(:last-child) {
+                margin-right: 1rem;
             }
         }
     }

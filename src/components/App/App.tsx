@@ -9,9 +9,13 @@ import Routes from '../Routes/Routes'
 import PageTitle from '../PageTitle/PageTitle'
 import FloorsTabsList from '../FloorsTabsList/FloorsTabsList'
 import FiltersTabsList from '../FiltersTabsList/FiltersTabsList'
+import ParkingAddDialog from '../ParkingAddDialog/ParkingAddDialog'
 
 const App: React.FC = () => {
     const isLargeViewport = useMediaQuery({ query: `(min-width: ${breakpoints.medium})` })
+
+    const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false)
+    const onToggleAddDialog = () => setAddDialogOpen(!addDialogOpen)
 
     const [navDrawerOpen, setNavDrawerOpen] = useState<boolean>(false)
     const handleNavDrawerToggle = () => setNavDrawerOpen(!navDrawerOpen)
@@ -29,7 +33,7 @@ const App: React.FC = () => {
             )}
 
             <div className='page-layout'>
-                <PageTitle />
+                <PageTitle onToggleAddDialog={onToggleAddDialog} />
 
                 <div className='flex-wrapper'>
                     <DrawerWhenMobile handleToggle={handleNavDrawerToggle} open={navDrawerOpen} position='left'>
@@ -43,6 +47,8 @@ const App: React.FC = () => {
                     </DrawerWhenMobile>
                 </div>
             </div>
+
+            <ParkingAddDialog isOpen={addDialogOpen} onClose={onToggleAddDialog} />
         </Router>
     )
 }

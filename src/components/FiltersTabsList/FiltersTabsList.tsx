@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import './FiltersTabsList.scss'
 import { Button } from '@blueprintjs/core'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
-import ParkingSpace from '../../types/parking-space.types'
+import ParkingSpace, { ParkingSpaceType } from '../../types/parking-space.types'
 import Icon from '@mdi/react'
 import { mdiCheckCircle, mdiBike, mdiCarPickup, mdiCarSports, mdiMotorbike, mdiWheelchairAccessibility } from '@mdi/js'
 import uniq from 'lodash/uniq'
@@ -20,10 +20,10 @@ const FiltersTabsList: React.FC = () => {
     const query = useQuery(useLocation().search)
     const parkingSpaceTypes = uniq(PARKING_SPACE_DATA.map((parkingSpace: ParkingSpace) => parkingSpace.type))
 
-    const isActive = (type: ParkingSpace['type']) => query.get('filter') === type
+    const isActive = (type: ParkingSpaceType) => query.get('filter') === type
 
     const availabilityCount = useCallback(
-        (type: ParkingSpace['type']) => {
+        (type: ParkingSpaceType) => {
             const floor = FLOOR_DATA.find((floor: Floor) => floor.id === (path?.params as { id: string }).id)
             if (!floor) {
                 return 0
@@ -37,7 +37,7 @@ const FiltersTabsList: React.FC = () => {
         [path?.params]
     )
 
-    const getIconByType = (type: ParkingSpace['type']) => {
+    const getIconByType = (type: ParkingSpaceType) => {
         switch (type) {
             case 'compact':
                 return mdiCarSports
@@ -59,7 +59,7 @@ const FiltersTabsList: React.FC = () => {
         }
     }
 
-    const onChangeFilter = (type: ParkingSpace['type']) => {
+    const onChangeFilter = (type: ParkingSpaceType) => {
         if (query.get('filter') === type) history.replace({ search: '' })
         else history.push(`?filter=${type}`)
     }
@@ -68,7 +68,7 @@ const FiltersTabsList: React.FC = () => {
         <div className='filters-tabs-list'>
             <p className='heading'>Filter by type</p>
 
-            {parkingSpaceTypes.map((type: ParkingSpace['type']) => (
+            {parkingSpaceTypes.map((type: ParkingSpaceType) => (
                 <Button
                     className={classnames('tab', isActive(type) ? 'active' : 'inactive')}
                     key={type}

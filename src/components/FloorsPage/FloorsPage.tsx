@@ -31,14 +31,16 @@ const FloorsPage: React.FC = () => {
             )}
 
             {!!parkingSpaces.length &&
-                parkingSpaces.map((parkingSpace: ParkingSpace) => (
-                    <ParkingListItem
-                        key={parkingSpace.id}
-                        parkingSpace={parkingSpace}
-                        onSelectParkingSpace={onSelectParkingSpace}
-                        selectedParkingSpaceId={selectedParkingSpaceId}
-                    />
-                ))}
+                parkingSpaces
+                    .sort((a: ParkingSpace, b: ParkingSpace) => (a.name < b.name ? -1 : 1))
+                    .map((parkingSpace: ParkingSpace) => (
+                        <ParkingListItem
+                            key={parkingSpace.id}
+                            parkingSpace={parkingSpace}
+                            onSelectParkingSpace={onSelectParkingSpace}
+                            selectedParkingSpaceId={selectedParkingSpaceId}
+                        />
+                    ))}
         </div>
     )
 }

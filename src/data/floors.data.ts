@@ -20,6 +20,10 @@ const FLOOR_DATA: Floor[] = [
     {
         id: '7000c4ea-a523-4ac2-8a0a-e2edf50c0114',
         name: 'Floor 5'
+    },
+    {
+        id: 'e9db07f5-d8c9-465a-b117-ea7c07402cf3',
+        name: 'Floor 6'
     }
 ]
 

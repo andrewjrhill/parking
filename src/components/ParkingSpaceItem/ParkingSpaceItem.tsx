@@ -9,7 +9,7 @@ import RatesBox from '../RatesBox/RatesBox'
 
 interface Props {
     parkingSpace: ParkingSpace
-    onEditDialogOpen: (initialFormState: ParkingSpace) => void
+    onEditDialogOpen: (parkingSpaceToEdit: ParkingSpace) => void
     onSelectParkingSpace: (parkingSpaceId: string | undefined) => void
     selectedParkingSpaceId?: string
 }
@@ -20,17 +20,16 @@ const ParkingSpaceItem: React.FC<Props> = ({
     onSelectParkingSpace,
     selectedParkingSpaceId
 }) => {
-    const availabilityLabel = parkingSpace.available ? 'available' : 'unavailable'
     const isActive = selectedParkingSpaceId === parkingSpace.id
 
     return (
-        <div className={classnames('parking-space-item', availabilityLabel, isActive && 'active')}>
+        <div className={classnames('parking-space-item', parkingSpace.availability, isActive && 'active')}>
             <div className='general-info'>
                 <span className='name'>{parkingSpace.name}</span>
 
                 <span className='type'>{parkingSpace.type}</span>
 
-                <span className='availability'>{availabilityLabel}</span>
+                <span className='availability'>{parkingSpace.availability}</span>
 
                 <Button
                     className='rates'

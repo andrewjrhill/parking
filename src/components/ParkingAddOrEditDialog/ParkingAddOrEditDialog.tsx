@@ -1,4 +1,4 @@
-import React, { MouseEvent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { MouseEvent, SyntheticEvent, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button, Dialog, HTMLSelect, InputGroup, Label, NumericInput } from '@blueprintjs/core'
 import { matchPath, useLocation } from 'react-router-dom'
@@ -8,73 +8,56 @@ import CloseButton from '../CloseButton/CloseButton'
 import './ParkingAddOrEditDialog.scss'
 import { capitalize, uniq } from 'lodash'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
-import ParkingSpace, { ParkingSpaceType } from '../../types/parking-space.types'
+import ParkingSpace, { ParkingSpaceAvailability, ParkingSpaceType } from '../../types/parking-space.types'
 import ordinal from 'ordinal'
-import Rates, { HourlyRate } from '../../types/rates.types'
+import { HourlyRate } from '../../types/rates.types'
 
 interface Props {
-    initialFormState?: ParkingSpace
+    parkingSpaceToEdit?: ParkingSpace
     isOpen: boolean
     onClose: () => void
 }
 
-const emptyFormState = {
-    available: true,
-    name: '',
-    rates: {
-        hourly: [{ hour: 1, amount: 0 }],
-        remaining: 0
-    },
-    type: 'compact' as ParkingSpaceType
-}
-
-const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onClose }) => {
+const ParkingAddOrEditDialog: React.FC<Props> = ({ parkingSpaceToEdit, isOpen, onClose }) => {
     const { pathname } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
-
-    const [name, setName] = useState<string>(initialFormState?.name ?? emptyFormState.name)
-    const [type, setType] = useState<ParkingSpaceType>(initialFormState?.type ?? emptyFormState.type)
-    const [available, setAvailable] = useState<boolean>(initialFormState?.available ?? emptyFormState.available)
-    const [rates, setRates] = useState<Rates>(initialFormState?.rates ?? emptyFormState.rates)
-
-    useEffect(() => {
-        if (!!initialFormState) {
-            setName(initialFormState.name)
-            setType(initialFormState.type)
-            setAvailable(initialFormState.available)
-            setRates(initialFormState.rates)
-        } else {
-            resetForm()
-        }
-    }, [initialFormState])
 
     const currentFloor = !!path
         ? FLOOR_DATA.find((floor: Floor) => (path?.params as { id: string }).id === floor.id)
         : undefined
 
-    const parkingSpaceTypes = uniq(
-        PARKING_SPACE_DATA.map((parkingSpace: ParkingSpace) => capitalize(parkingSpace.type))
-    )
+    const emptyFormState: ParkingSpace = {
+        availability: 'available' as ParkingSpaceAvailability,
+        floorId: currentFloor?.id ?? '',
+        id: uuidv4(),
+        name: '',
+        rates: {
+            hourly: [{ hour: 1, amount: 0 }],
+            remaining: 0
+        },
+        type: 'compact' as ParkingSpaceType
+    }
 
-    const resetForm = () => {
-        setName(emptyFormState.name)
-        setType(emptyFormState.type)
-        setAvailable(emptyFormState.available)
-        setRates(emptyFormState.rates)
+    const [formState, setFormState] = useState<ParkingSpace>(emptyFormState)
+
+    const ParkingSpaceAvailabilities = uniq(PARKING_SPACE_DATA.map((p: ParkingSpace) => p.availability))
+    const parkingSpaceTypes = uniq(PARKING_SPACE_DATA.map((p: ParkingSpace) => p.type))
+
+    const populateEditForm = () => {
+        if (!parkingSpaceToEdit) throw new Error('Error: edit data not found!')
+        setFormState(parkingSpaceToEdit)
     }
 
     const onSubmit = (event: SyntheticEvent) => {
         event.preventDefault()
 
-        if (!currentFloor) throw new Error('Error: current floor not found!')
-
-        const payload = {
-            available,
-            floorId: currentFloor.id,
-            id: initialFormState?.id ?? uuidv4(),
-            name,
-            rates,
-            type: type.toLowerCase() as ParkingSpaceType
+        const payload: ParkingSpace = {
+            availability: formState.availability,
+            floorId: currentFloor?.id ?? '',
+            id: formState.id,
+            name: formState.name,
+            rates: formState.rates,
+            type: formState.type
         }
 
         const existingParkingSpaceIndex = PARKING_SPACE_DATA.findIndex(parkingIndex => parkingIndex.id === payload.id)
@@ -82,15 +65,26 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
         PARKING_SPACE_DATA.push(payload)
 
         onClose()
-        resetForm()
+        setFormState(emptyFormState)
     }
 
     return (
-        <Dialog className='parking-add-or-edit-dialog' isOpen={isOpen} onClose={onClose}>
+        <Dialog
+            className='parking-add-or-edit-dialog'
+            isOpen={isOpen}
+            key={formState.id}
+            onClose={onClose}
+            onOpening={parkingSpaceToEdit ? populateEditForm : undefined}
+        >
             <CloseButton onClick={onClose} />
 
-            <p className='title'>Add Parking Space</p>
-            <p className='subtitle'>You are adding a new parking space to {currentFloor?.name}</p>
+            <p className='title'>{!!parkingSpaceToEdit ? 'Edit' : 'Add'} Parking Space</p>
+
+            <p className='subtitle'>
+                {!!parkingSpaceToEdit
+                    ? `You are editing a parking space on ${currentFloor?.name}.`
+                    : `You are adding a new parking space to ${currentFloor?.name}.`}
+            </p>
 
             <form className='form' onSubmit={onSubmit}>
                 <p className='form-section-heading'>General Information</p>
@@ -98,14 +92,13 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                 <Label>
                     Name:
                     <InputGroup
+                        defaultValue={formState.name}
                         fill
                         id='name'
                         name='name'
-                        maxLength={5}
-                        onChange={event => setName(event.currentTarget.value)}
+                        onChange={event => setFormState({ ...formState, name: event.currentTarget.value })}
                         placeholder='e.g. P314'
                         required
-                        defaultValue={name}
                     />
                 </Label>
 
@@ -113,12 +106,14 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                     <Label>
                         Type:
                         <HTMLSelect
-                            defaultValue={capitalize(type)}
+                            defaultValue={formState.type}
                             fill
                             id='type'
                             name='type'
-                            onChange={event => setType(event.currentTarget.value as ParkingSpaceType)}
-                            options={parkingSpaceTypes}
+                            onChange={event =>
+                                setFormState({ ...formState, type: event.currentTarget.value as ParkingSpaceType })
+                            }
+                            options={parkingSpaceTypes.map(value => ({ label: capitalize(value), value }))}
                             required
                         />
                     </Label>
@@ -126,15 +121,17 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                     <Label>
                         Availability:
                         <HTMLSelect
-                            defaultValue={available ? 'Available' : 'Unavailable'}
+                            defaultValue={formState.availability}
                             fill
-                            id='available'
-                            name='available'
-                            onChange={event => {
-                                if (event.currentTarget.value === 'Available') return setAvailable(true)
-                                else return setAvailable(false)
-                            }}
-                            options={['Available', 'Unavailable']}
+                            id='availability'
+                            name='availability'
+                            onChange={event =>
+                                setFormState({
+                                    ...formState,
+                                    availability: event.currentTarget.value as ParkingSpaceAvailability
+                                })
+                            }
+                            options={ParkingSpaceAvailabilities.map(value => ({ label: capitalize(value), value }))}
                             required
                         />
                     </Label>
@@ -142,7 +139,7 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
 
                 <p className='form-section-heading'>Manage Rates</p>
 
-                {rates.hourly
+                {formState.rates.hourly
                     .sort((a, b) => (a.hour < b.hour ? -1 : 1))
                     .map(({ hour, amount }) => (
                         <Label key={`rate-${hour}`}>
@@ -154,13 +151,17 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                                 min={0}
                                 name={`rate-${hour}`}
                                 onValueChange={(value: number) => {
-                                    console.log(rates.hourly)
-                                    setRates({
-                                        hourly: [
-                                            ...rates.hourly.filter((rate: HourlyRate) => rate.hour !== hour),
-                                            { hour, amount: value }
-                                        ],
-                                        remaining: rates.remaining
+                                    setFormState({
+                                        ...formState,
+                                        rates: {
+                                            hourly: [
+                                                ...formState.rates.hourly.filter(
+                                                    (rate: HourlyRate) => rate.hour !== hour
+                                                ),
+                                                { hour, amount: value }
+                                            ],
+                                            remaining: formState.rates.remaining
+                                        }
                                     })
                                 }}
                                 required
@@ -173,15 +174,18 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                     fill
                     onClick={(event: MouseEvent) => {
                         event.preventDefault()
-                        setRates({
-                            ...rates,
-                            hourly: [
-                                ...rates.hourly,
-                                {
-                                    hour: rates.hourly[rates.hourly.length - 1].hour + 1,
-                                    amount: 0
-                                }
-                            ]
+                        setFormState({
+                            ...formState,
+                            rates: {
+                                ...formState.rates,
+                                hourly: [
+                                    ...formState.rates.hourly,
+                                    {
+                                        hour: formState.rates.hourly[formState.rates.hourly.length - 1].hour + 1,
+                                        amount: 0
+                                    }
+                                ]
+                            }
                         })
                     }}
                 >
@@ -189,7 +193,9 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                 </Button>
 
                 <Label>
-                    {`Rate for all hours after the ${ordinal(rates.hourly[rates.hourly.length - 1].hour)} hour: `}
+                    {`Rate for all hours after the ${ordinal(
+                        formState.rates.hourly[formState.rates.hourly.length - 1].hour
+                    )} hour: `}
                     <NumericInput
                         defaultValue={0}
                         fill
@@ -197,9 +203,12 @@ const ParkingAddOrEditDialog: React.FC<Props> = ({ initialFormState, isOpen, onC
                         min={0}
                         name='remaining-hours-rate'
                         onValueChange={(value: number) => {
-                            setRates({
-                                ...rates,
-                                remaining: value
+                            setFormState({
+                                ...formState,
+                                rates: {
+                                    ...formState.rates,
+                                    remaining: value
+                                }
                             })
                         }}
                         required

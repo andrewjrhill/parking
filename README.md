@@ -7,11 +7,13 @@ Repository containing a complete implementation of an "Easy Parking" web applica
 - [Blueprint](https://blueprintjs.com/) - A React-based UI toolkit for the web.
 - [TypeScript](https://www.typescriptlang.org/) - JavaScript but with static type definitions.
 
-![Easy Parking Screenshot](...) TODO!
-
 ## Demo
 
-A demo for this project can be found at: TODO!
+A demo for this project [can be found here](https://parking-38145.web.app/).
+
+## UML Class Diagram
+
+A UML Class Diagram for this project [can be found here](https://github.com/andrewjrhill/parking/raw/master/uml-class-diagram.png).
 
 ## Platform Goals
 

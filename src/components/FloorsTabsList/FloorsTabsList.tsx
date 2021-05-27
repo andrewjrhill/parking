@@ -19,7 +19,7 @@ const FloorsTabsList: React.FC = () => {
 
     const parkingSpaceAvailabilityCount = (floorId: string) =>
         PARKING_SPACE_DATA.filter(
-            (parkingSpace: ParkingSpace) => parkingSpace.floorId === floorId && !!parkingSpace.available
+            (parkingSpace: ParkingSpace) => parkingSpace.floorId === floorId && !!parkingSpace.availability
         ).length
 
     return (

@@ -1,9 +1,10 @@
 import Rates from './rates.types'
 
+export type ParkingSpaceAvailability = 'available' | 'unavailable'
 export type ParkingSpaceType = 'compact' | 'large' | 'handicapped' | 'motorcycle' | 'bicycle'
 
 interface ParkingSpace {
-    available: boolean
+    availability: ParkingSpaceAvailability
     floorId: string
     id: string
     name: string

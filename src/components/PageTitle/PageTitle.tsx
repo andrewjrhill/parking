@@ -23,7 +23,7 @@ const PageTitle: React.FC<Props> = ({ onToggleAddDialog }) => {
         () =>
             !!currentFloor &&
             PARKING_SPACE_DATA.filter(
-                (parkingSpace: ParkingSpace) => parkingSpace.floorId === currentFloor.id && !!parkingSpace.available
+                (parkingSpace: ParkingSpace) => parkingSpace.floorId === currentFloor.id && !!parkingSpace.availability
             ).length > 0
                 ? 'Parking Available'
                 : 'Parking Unavailable',

@@ -13,11 +13,11 @@ const FloorsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>()
     const query = useQuery(useLocation().search)
 
-    const [initialEditFormState, setInitialEditFormState] = useState<ParkingSpace | undefined>()
-    const onEditDialogOpen = (initialFormState: ParkingSpace) => setInitialEditFormState(initialFormState)
+    const [parkingSpaceToEdit, setParkingSpaceToEdit] = useState<ParkingSpace>()
+    const onEditDialogOpen = (parkingSpaceToEdit: ParkingSpace) => setParkingSpaceToEdit(parkingSpaceToEdit)
 
     const [selectedParkingSpaceId, setSelectedParkingSpaceId] = useState<string | undefined>()
-    const onSelectParkingSpace = (floorId?: string) => setSelectedParkingSpaceId(floorId)
+    const onSelectParkingSpace = (parkingSpaceId?: string) => setSelectedParkingSpaceId(parkingSpaceId)
 
     const parkingSpaces = PARKING_SPACE_DATA.filter((parkingSpace: ParkingSpace) => {
         if (!!query.get('filter')) return parkingSpace.floorId === id && parkingSpace.type === query.get('filter')
@@ -50,9 +50,9 @@ const FloorsPage: React.FC = () => {
             </div>
 
             <ParkingAddOrEditDialog
-                initialFormState={initialEditFormState}
-                isOpen={!!initialEditFormState}
-                onClose={() => setInitialEditFormState(undefined)}
+                parkingSpaceToEdit={parkingSpaceToEdit}
+                isOpen={!!parkingSpaceToEdit}
+                onClose={() => setParkingSpaceToEdit(undefined)}
             />
         </>
     )

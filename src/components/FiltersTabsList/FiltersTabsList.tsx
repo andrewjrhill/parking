@@ -5,7 +5,7 @@ import { Button } from '@blueprintjs/core'
 import PARKING_SPACE_DATA from '../../data/parking-space.data'
 import ParkingSpace, { ParkingSpaceType } from '../../types/parking-space.types'
 import Icon from '@mdi/react'
-import { mdiCheckCircle, mdiBike, mdiCarPickup, mdiCarSports, mdiMotorbike, mdiWheelchairAccessibility } from '@mdi/js'
+import { mdiCloseCircle, mdiBike, mdiCarPickup, mdiCarSports, mdiMotorbike, mdiWheelchairAccessibility } from '@mdi/js'
 import uniq from 'lodash/uniq'
 import { useHistory } from 'react-router'
 import { matchPath, useLocation } from 'react-router-dom'
@@ -18,23 +18,29 @@ const FiltersTabsList: React.FC = () => {
     const { pathname } = useLocation()
     const path = matchPath(pathname, { path: '/floor/:id' })
     const query = useQuery(useLocation().search)
-    const parkingSpaceTypes = uniq(PARKING_SPACE_DATA.map((parkingSpace: ParkingSpace) => parkingSpace.type))
+    const parkingSpaceTypes = uniq(PARKING_SPACE_DATA.map((parkingSpace: ParkingSpace) => parkingSpace.type)).sort(
+        (a, b) => (a > b ? 1 : -1)
+    )
+
+    const currentFloor = !!path
+        ? FLOOR_DATA.find((floor: Floor) => (path?.params as { id: string }).id === floor.id)
+        : undefined
 
     const isActive = (type: ParkingSpaceType) => query.get('filter') === type
 
     const availabilityCount = useCallback(
         (type: ParkingSpaceType) => {
-            const floor = FLOOR_DATA.find((floor: Floor) => floor.id === (path?.params as { id: string }).id)
+            const floor = FLOOR_DATA.find((floor: Floor) => floor.id === currentFloor?.id)
             if (!floor) {
                 return 0
             } else {
                 return PARKING_SPACE_DATA.filter(
                     (parkingSpace: ParkingSpace) =>
-                        parkingSpace.floorId === floor.id && parkingSpace.type === type && parkingSpace.available
+                        parkingSpace.floorId === floor.id && parkingSpace.type === type && parkingSpace.availability
                 ).length
             }
         },
-        [path?.params]
+        [currentFloor?.id]
     )
 
     const getIconByType = (type: ParkingSpaceType) => {
@@ -77,7 +83,7 @@ const FiltersTabsList: React.FC = () => {
                     <Icon className='icon' path={getIconByType(type)} />
                     <span className='type'>{type}</span>
                     <span className='availability-count'>{availabilityCount(type)}</span>
-                    {isActive(type) && <Icon className='icon checkmark' path={mdiCheckCircle} />}
+                    {isActive(type) && <Icon className='icon checkmark' path={mdiCloseCircle} />}
                 </Button>
             ))}
         </div>
